@@ -51,7 +51,7 @@
 $_SERVER["REQUEST_TIME_FLOAT"] = microtime(true);
 
 
-require_once 'schema-generator.php';
+require_once __DIR__ . '/schema-generator.php';
 
 
 try {
@@ -59,13 +59,13 @@ try {
     define('GEO_API_ACCESS', true);
     
     // Check if optimized data exists
-    if (!file_exists('./geoapi-production.php')) {
+    if (!file_exists(__DIR__ . '/geoapi-optimized.php')) {
         echo "⚠️  Please first to create geo location data file.\n";
         echo "exp: [ 'city'=>'Frederiksted','state'=>'Virgin Islands','latitude'=>17.7122,'longitude'=>-64.8812,]\n";
         exit(1);
     }
 
-    $locations = include './geoapi-optimized.php';
+    $locations = include __DIR__ . '/geoapi-optimized.php';
 
     // Step 2: Define business info for a specific PostScan Mail location
     // Modify these details for each location as needed
@@ -106,27 +106,32 @@ try {
     );
 
 
-    // echo schema preview
-    echo "✓ Schema generated successfully!\n";
-    echo "Schema preview (first 500 characters):\n";
-    echo substr($schema_json, 0, 500) . "...\n";
-    // Save to 2 files json and json-ld
-    file_put_contents('store-schema.json', $schema_json);
-    file_put_contents('store-schema.json-ld', $schema_json);
-    echo "✓ Schema saved to store-schema.json\n\n";
-    echo "✓ Schema saved to store-schema.json-ld\n\n";
+// echo schema preview
+// echo "✓ Schema generated successfully!\n";
+// echo "Schema preview (first 500 characters):\n";
+// echo substr($schema_json, 0, 500) . "...\n";
+  
+// just embad the result in <script json-ld > tag and save to file
+$schema_js = "";
+$schema_js .= "<script type=\"application/ld+json\">\n";
+$schema_js .= $schema_json;
+$schema_js .= "\n</script>\n";
 
-    // echo time to complete script
+echo $schema_js;
+
+
+
     $end_time = microtime(true);
     $execution_time = $end_time - $_SERVER["REQUEST_TIME_FLOAT"];
     echo "Script execution time: " . round($execution_time, 2) . " seconds\n";
-
+    echo "<br>";
 
 } catch (Exception $e) {
     echo "ERROR: " . $e->getMessage() . "\n";
     echo "\nMake sure to:\n";
-    echo "1. Run convert_data.php first to create optimized data files\n";
-    echo "2. Ensure geoapi-min.json exists in the parent directory\n";
-    echo "3. Check file permissions for the optimized directory\n";
+    echo "1. Ensure geoapi-optimized.php and schema-generator.php and geo-calculator.php are exist in the parent directory\n";
+    echo "2. Check file permissions for the schemas directory\n";
 }
+        // opcache_reset();
+        // echo "oPcache cleared!";
 ?>

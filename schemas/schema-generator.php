@@ -146,14 +146,14 @@ class schemaGenerator {
                         strtolower(trim($string_value)) === 'false' || 
                         $value === false) {
                         $validated_info[$field] = false;
-                        echo "Field '{$field}' is set to false.\n";
+                        // echo "Field '{$field}' is set to false.\n";
                     }
                     // Handle truthy values - convert to true
                     elseif ($value === 1 || $value === '1' || 
                             strtolower(trim($string_value)) === 'true' || 
                             $value === true) {
                         $validated_info[$field] = true;
-                        echo "Field '{$field}' is set to true.\n";
+                        // echo "Field '{$field}' is set to true.\n";
                     }
                     // Invalid boolean value
                     else {
