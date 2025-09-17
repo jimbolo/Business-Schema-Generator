@@ -31,8 +31,8 @@ A high-performance PHP library for generating Schema.org LocalBusiness JSON-LD w
 ## Quick Start
 
 ```php
-require_once 'schemas/geo-calculator.php';
-require_once 'schemas/schema-generator.php';
+// Run schema-generator.php file
+'schemas/schema-generator.php'
 
 // Business information
 $business_info = [
