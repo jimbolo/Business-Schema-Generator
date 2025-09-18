@@ -1,0 +1,27 @@
+{
+    "terminal.integrated.profiles.windows": {
+        "PowerShell with PHP": {
+            "source": "PowerShell",
+            "args": ["-NoExit", "-Command", "$env:PATH += ';C:\\xampp\\php'"]
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell with PHP",
+    "terminal.integrated.env.windows": {
+        "PATH": "${env:PATH};C:\\xampp\\php"
+    },
+       "php.executablePath": "C:\\xampp\\php\\php.exe",
+    "php.validate.executablePath": "C:\\xampp\\php\\php.exe",
+    "php.debug.executablePath": "C:\\xampp\\php\\php.exe",
+    "phpunit.php": "C:\\xampp\\php\\php.exe",
+    "phpunit.phpunit": "C:\\xampp\\php\\phpunit.phar",
+    "code-runner.executorMap": {
+        "php": "C:\\xampp\\php\\php.exe"
+    },
+    "code-runner.runInTerminal": true,
+    "code-runner.saveFileBeforeRun": true,
+    "code-runner.saveAllFilesBeforeRun": false,
+    "code-runner.ignoreSelection": true,
+    "code-runner.clearPreviousOutput": true,
+    "code-runner.fileDirectoryAsCwd": true,
+    "code-runner.temporaryFileName": "temp_runner_${fileBasenameNoExtension}_${date}.php"
+}
