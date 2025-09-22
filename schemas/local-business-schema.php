@@ -111,8 +111,8 @@ try {
 // echo "Schema preview (first 500 characters):\n";
 // echo substr($schema_json, 0, 500) . "...\n";
 
-file_put_contents('store-schema.json', $schema_json);
-echo "✓ Schema saved to store-schema.json\n\n";
+file_put_contents('local-business-schema.json', $schema_json);
+echo "✓ Schema saved to local-business-schema.json\n\n";
 
 // just embed the result in <script json-ld > tag and save to file
 $schema_js = "";
