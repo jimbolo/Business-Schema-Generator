@@ -21,7 +21,7 @@ A high-performance PHP library that generates Schema.org LocalBusiness JSON-LD s
 
 ```
 ├── wp-page.php                    # Main entry point
-├── local-business-schema.json     # Generated schema output
+├── local-business-schema.json     # Generated test schema output
 └── schemas/
     ├── local-business-schema.php        # Business data configuration
     ├── schema-generator.php    # Core schema generation
