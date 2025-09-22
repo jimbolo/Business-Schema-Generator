@@ -99,8 +99,8 @@ try {
     $schema_json = schemaGenerator::generateSchemaJson(
         $business_info, $locations,
         [
-            'search_radius' => 30,
-            'max_cities' => 30,
+            'search_radius' => 10,
+            'max_cities' => 2,
 
         ]
     );
@@ -110,8 +110,11 @@ try {
 // echo "✓ Schema generated successfully!\n";
 // echo "Schema preview (first 500 characters):\n";
 // echo substr($schema_json, 0, 500) . "...\n";
-  
-// just embad the result in <script json-ld > tag and save to file
+
+file_put_contents('store-schema.json', $schema_json);
+echo "✓ Schema saved to store-schema.json\n\n";
+
+// just embed the result in <script json-ld > tag and save to file
 $schema_js = "";
 $schema_js .= "<script type=\"application/ld+json\">\n";
 $schema_js .= $schema_json;
