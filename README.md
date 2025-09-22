@@ -13,17 +13,17 @@ A high-performance PHP library that generates Schema.org LocalBusiness JSON-LD s
 
 ## Quick Start
 
-1. Include the main file: `php store.php`
-2. Configure business data in `schemas/store-schema.php`
-3. Generated schema outputs to `store-schema.json`
+1. Include the main file: `php wp-page.php`
+2. Configure business data in `schemas/local-business-schema.php`
+3. Generated test schema outputs to `local-business-schema.json`
 
 ## File Structure
 
 ```
-├── store.php                    # Main entry point
-├── store-schema.json           # Generated schema output
+├── wp-page.php                    # Main entry point
+├── local-business-schema.json     # Generated schema output
 └── schemas/
-    ├── store-schema.php        # Business data configuration
+    ├── local-business-schema.php        # Business data configuration
     ├── schema-generator.php    # Core schema generation
     ├── geo-calculator.php      # Geographic calculations
     └── geoapi-production.php   # Location database

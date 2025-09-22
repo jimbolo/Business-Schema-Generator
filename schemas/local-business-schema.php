@@ -51,6 +51,53 @@
 $_SERVER["REQUEST_TIME_FLOAT"] = microtime(true);
 
 
+// Create Generic script to pull all the default WP post/page fields from database table
+echo '<script type="text/javascript">' . "\n";
+// function get_wp_post_fields_content() {
+//     global $wpdb;
+//     // get ID from current page
+//     $post_id = get_the_ID();
+//     $post = $wpdb->get_row("SELECT * FROM {$wpdb->posts} WHERE ID = $post_id", 'ARRAY_A');
+//     return $post;
+// }
+// echo json_encode(get_wp_post_fields_content(), JSON_PRETTY_PRINT);
+function get_acf_fields() {
+    // Check if WordPress functions are available
+    if (!function_exists('get_the_ID') || !function_exists('get_fields')) {
+        return [];
+    }
+    
+    // Check if ACF plugin is active
+    if (!function_exists('get_fields')) {
+        return [];
+    }
+    
+    return get_fields(get_the_ID());
+}
+// map ACF fields with their content
+function map_acf_fields() {
+    $acf_fields = get_acf_fields();
+    $mapped_fields = [];
+    if (empty($acf_fields) || !is_array($acf_fields)) {
+        return [];
+    }
+    foreach ($acf_fields as $field_name => $field_value) {
+        $mapped_fields[$field_name] = $field_value;
+    }
+    return $mapped_fields;
+}
+// Only output if we're in a WordPress context
+if (function_exists('get_the_ID') && function_exists('get_fields')) {
+    echo json_encode(map_acf_fields(), JSON_PRETTY_PRINT);
+} else {
+    echo json_encode(['error' => 'WordPress or ACF not available'], JSON_PRETTY_PRINT);
+}
+echo '</script>' . "\n";
+// Map ACF fields to schema
+$mapped_fields = map_acf_fields();
+
+
+
 require_once __DIR__ . '/schema-generator.php';
 
 
@@ -71,28 +118,29 @@ try {
     // Modify these details for each location as needed
     // Use WP Custom Fields or Database to populate dynamically if needed
     $business_info = [
-        'latitude' => 34.0910833,
-        'longitude' => -118.3008766,
-        '@id' => 'https://www.postscanmail.com/a/5101-santa-monica-blvd-ste-8.html', // ID ( Web Page URL)
-        'name' => 'PostScan Mail - Los Angeles Virtual Address and Mailbox', // replace Los Angeles with City Name
+        // "mapbox_api_lat
+        'latitude' => $mapped_fields['mapbox_api_lat'] ?? '',
+        'longitude' => $mapped_fields['mapbox_api_lon'] ?? '',
+        '@id' => ''. (get_permalink() ?? '') . '',
+        'name' => 'PostScan Mail - ' . ($mapped_fields['mapbox_api_city'] ?? '') . ' Virtual Address and Mailbox',
         'legalName' => 'PostScan Mail', // Do not modify
-        'alternateName' => 'PostScan Mail Los Angeles CA', // replace  Los Angeles with City & State Abbreviations
-        'url' => 'https://www.postscanmail.com/a/5101-santa-monica-blvd-ste-8.html', // ID ( Web Page URL)
+        'alternateName' => 'PostScan Mail ' . ($mapped_fields['mapbox_api_city'] ?? '') . ' ' . ($mapped_fields['mapbox_api_state'] ?? ''), 
+        'url' => ''. (get_permalink() ?? '') . '',
         'image' => 'https://www.postscanmail.com/logo.png', // Do not modify
         'logo' => 'https://www.postscanmail.com/logo.png', // Do not modify
-        'description' => 'Need a professional virtual address in Los Angeles? PostScan Mail provides real street addresses (not PO Boxes) that work for business registration, LLC formation, and IRS compliance. Perfect for small businesses, freelancers, and remote workers who need a professional business presence without a physical office.', // replace Los Angeles with City Name
+        'description' => 'Need a professional virtual address in ' . ($mapped_fields['mapbox_api_city'] ?? '').'? PostScan Mail provides real street addresses (not PO Boxes) that work for business registration, LLC formation, and IRS compliance. Perfect for small businesses, freelancers, and remote workers who need a professional business presence without a physical office.',
         'telephone' => '+18006245866', // Do not modify
         'email' => 'support@postscanmail.com', // Do not modify
-        'address' => [ // do not modify
+        'address' => [
             'type' => 'PostalAddress',// Do not modify
-            'streetAddress' => '5101 Santa Monica Blvd Ste 8', // insert Street Name
-            'addressLocality' => 'Los Angeles', // insert City Name
-            'addressRegion' => 'CA', // insert State Abbreviations
-            'postalCode' => '90029', // insert Zip Code
-            'addressCountry' => 'United States' // insert Country (US or United Sates)
+            'streetAddress' => '' . ($mapped_fields['mapbox_api_address'] ?? '') . '',
+            'addressLocality' => '' . ($mapped_fields['mapbox_api_city'] ?? '') . '',
+            'addressRegion' => '' . ($mapped_fields['mapbox_api_state'] ?? '') . '',
+            'postalCode' => '' . ($mapped_fields['mapbox_api_zip_code'] ?? '') . '',
+            'addressCountry' => '' . ($mapped_fields['mapbox_api_country'] ?? '') . ''
         ],
-        'registerUrl' => 'https://app.postscanmail.com/registration?plan=10037&store=505&address=1591', // add Starter Monthly plan link
-        'registeredAgent' => true // Indicates if the business has a registered agent
+        'checkoutUrl' => ''. ($mapped_fields['mapbox_api_url'] ?? '') . '',
+        'registeredAgent' => ($mapped_fields['mapbox_is_registered_agent'] ?? '')
     ];
 
     // Generate areaServed schema
